@@ -38,7 +38,7 @@ public class SecurityConfig {
                 registry.addMapping("/**") // Allow all endpoints
                         .allowedOrigins("http://localhost:3000") // Allow your frontend origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
-                        .allowedHeaders("*") // Allow all headers
+                        .allowedHeaders("Authorization", "Content-Type", "Accept", "Accept-Encoding")
                         .allowCredentials(true); // Allow credentials like cookies
             }
         };
@@ -65,15 +65,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/signup", "/auth/login").permitAll()  // No authentication required for signup and login
-                .requestMatchers("/admin/**", "/platform/**").authenticated() // JWT Authentication for /admin and /platform routes
-                .anyRequest().denyAll() // Deny other requests
-            )
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)  // Ensure JWT filter runs before UsernamePasswordAuthenticationFilter
-            .httpBasic(); // Optional basic authentication (useful for testing)
-        return http.build();
-    }
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.cors().and() // Enable CORS
+        .csrf().disable() // Disable CSRF for stateless APIs
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/auth/signup", "/auth/login").permitAll()
+            .requestMatchers("/admin/**", "/platform/**").authenticated()
+            .anyRequest().denyAll()
+        )
+        .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+        .httpBasic(); // Optional for basic auth testing
+    return http.build();
+}
+
 }

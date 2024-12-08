@@ -1,5 +1,5 @@
 package com.example.API_manager.controller;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.example.API_manager.model.ApiConfiguration;
 import com.example.API_manager.service.ApiConfigurationService;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/admin")
 public class ApiConfigurationController {
 
