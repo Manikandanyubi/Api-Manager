@@ -3,7 +3,7 @@ package com.example.API_manager.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,42 +18,39 @@ public class ApiConfiguration {
     @Column(name = "base_uri")
     private String baseUri;
 
-    @Column(name = "end_uri")
-    private String endUri;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "api_configuration_id")
+    private List<Endpoint> endUris;
 
-    private String method;
+    public Long getId() {
+        return id;
+    }
 
-    @ElementCollection
-    private Map<String, String> headers;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    @Column(name = "body_type")
-    private String bodyType; // Raw, Form
+    public String getName() {
+        return name;
+    }
 
-    @Column(name = "content_type")
-    private String contentType; // application/json, application/x-www-form-urlencoded, multipart/form-data
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getBaseUri() {
+        return baseUri;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setBaseUri(String baseUri) {
+        this.baseUri = baseUri;
+    }
 
-    public String getBaseUri() { return baseUri; }
-    public void setBaseUri(String baseUri) { this.baseUri = baseUri; }
+    public List<Endpoint> getEndUris() {
+        return endUris;
+    }
 
-    public String getEndUri() { return endUri; }
-    public void setEndUri(String endUri) { this.endUri = endUri; }
-
-    public String getMethod() { return method; }
-    public void setMethod(String method) { this.method = method; }
-
-    public Map<String, String> getHeaders() { return headers; }
-    public void setHeaders(Map<String, String> headers) { this.headers = headers; }
-
-    public String getBodyType() { return bodyType; }
-    public void setBodyType(String bodyType) { this.bodyType = bodyType; }
-
-    public String getContentType() { return contentType; }
-    public void setContentType(String contentType) { this.contentType = contentType; }
+    public void setEndUris(List<Endpoint> endUris) {
+        this.endUris = endUris;
+    }
 }
