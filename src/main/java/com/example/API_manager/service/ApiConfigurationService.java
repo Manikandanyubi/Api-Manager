@@ -3,6 +3,8 @@ package com.example.API_manager.service;
 import com.example.API_manager.model.ApiConfiguration;
 import com.example.API_manager.model.Endpoint;
 import com.example.API_manager.repository.ApiConfigurationRepository;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,12 @@ public class ApiConfigurationService {
     }
 
     // Create a new API configuration
-    public ApiConfiguration createApi(ApiConfiguration api) {
+     public ApiConfiguration createApi(ApiConfiguration api) {
+        // Get the current user's email from the security context
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Set the email in the API configuration
+        api.setUserEmail(userEmail);
         return repository.save(api);
     }
 
@@ -25,9 +32,15 @@ public class ApiConfigurationService {
     public ApiConfiguration updateApi(Long id, ApiConfiguration updatedApi) {
         return repository.findById(id)
                 .map(existingApi -> {
+                    // Get the current user's email from the security context
+                    String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
                     // Update the main API configuration fields
                     existingApi.setName(updatedApi.getName());
                     existingApi.setBaseUri(updatedApi.getBaseUri());
+
+                    // Set the updated user email (this is for tracking purposes)
+                    existingApi.setUserEmail(userEmail);
 
                     // Handle updating or adding endpoints
                     List<Endpoint> updatedEndpoints = updatedApi.getEndUris();
@@ -53,6 +66,7 @@ public class ApiConfigurationService {
                         existingApi.getEndUris().subList(updatedEndpoints.size(), existingApi.getEndUris().size()).clear();
                     }
 
+                    // Save the updated API configuration
                     return repository.save(existingApi);
                 })
                 .orElseThrow(() -> new RuntimeException("API not found with ID: " + id));

@@ -22,6 +22,8 @@ public class ApiConfiguration {
     @JoinColumn(name = "api_configuration_id")
     private List<Endpoint> endUris;
 
+    private String userEmail;  // Added user email field
+
     public Long getId() {
         return id;
     }
@@ -52,5 +54,13 @@ public class ApiConfiguration {
 
     public void setEndUris(List<Endpoint> endUris) {
         this.endUris = endUris;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }
