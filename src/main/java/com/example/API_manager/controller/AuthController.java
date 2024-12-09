@@ -16,14 +16,12 @@ public class AuthController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // Constructor-based injection
     public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     /**
-     * Sign up a new user.
      * @param user The user information for signup.
      * @return Response indicating the success or failure of the signup.
      */
@@ -35,13 +33,11 @@ public class AuthController {
             return ResponseEntity.status(409).body(Map.of("status", "failure", "message", "Email already in use"));
         }
 
-        // Save the new user (hash password before saving if needed)
         userService.save(user);
         return ResponseEntity.status(201).body(Map.of("status", "success", "message", "User registered successfully"));
     }
 
     /**
-     * Sign in an existing user.
      * @param credentials The user's email and password.
      * @return Response indicating the result of the login attempt.
      */

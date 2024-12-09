@@ -24,6 +24,8 @@ public class Endpoint {
 
     private String contentType; // e.g., "application/json"
 
+    private String params;
+
     @Lob
     private String bodyContent; // Example data for raw or form data
 
@@ -81,5 +83,13 @@ public class Endpoint {
 
     public void setBodyContent(String bodyContent) {
         this.bodyContent = bodyContent;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
     }
 }

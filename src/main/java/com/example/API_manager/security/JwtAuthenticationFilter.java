@@ -24,7 +24,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // Get the JWT token from the request header
         String token = jwtTokenProvider.resolveToken(request);
-       
 
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {

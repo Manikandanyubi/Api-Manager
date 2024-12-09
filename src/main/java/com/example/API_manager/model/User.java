@@ -16,8 +16,6 @@ public class User {
 
     private String email;
     private String password;
-
-    // Getter and Setter for email
     public String getEmail() {
         return email;
     }

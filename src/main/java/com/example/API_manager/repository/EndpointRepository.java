@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface EndpointRepository extends JpaRepository<Endpoint, Long> {
-    // Custom query to find endpoints by endUri if needed
     List<Endpoint> findByEndUriContaining(String endUri);
 }
