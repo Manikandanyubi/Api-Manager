@@ -20,14 +20,14 @@ public class Endpoint {
     @ElementCollection
     private Map<String, String> headers;
 
-    private String bodyType; // e.g., "Raw" or "Form"
+    private String bodyType;
 
-    private String contentType; // e.g., "application/json"
+    private String contentType;
 
     private String params;
 
     @Lob
-    private String bodyContent; // Example data for raw or form data
+    private String bodyContent;
 
     public Long getId() {
         return id;

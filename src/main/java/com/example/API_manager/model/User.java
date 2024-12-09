@@ -9,11 +9,9 @@ import lombok.Data;
 @Data
 @Entity
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String email;
     private String password;
     public String getEmail() {
@@ -24,7 +22,6 @@ public class User {
         this.email = email;
     }
 
-    // Getter and Setter for password
     public String getPassword() {
         return password;
     }

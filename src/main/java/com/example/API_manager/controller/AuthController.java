@@ -45,16 +45,11 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
-
-        // Authenticate the user using the email and password
         Optional<User> authenticatedUser = userService.authenticate(email, password);
 
         if (authenticatedUser.isPresent()) {
             try {
-                // Generate JWT token using the injected JwtTokenProvider
                 String token = jwtTokenProvider.createToken(email);
-
-                // Return the JWT token as part of the response
                 return ResponseEntity.ok(Map.of(
                         "status", "success",
                         "message", "Login successful",

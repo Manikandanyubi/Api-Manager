@@ -24,6 +24,11 @@ public class ApiConfiguration {
 
     private String userEmail;  // Added user email field
 
+    @ElementCollection
+    @CollectionTable(name = "collaborators", joinColumns = @JoinColumn(name = "api_configuration_id"))
+    @Column(name = "email")
+    private List<String> collaborators;  // Added collaborators field
+
     public Long getId() {
         return id;
     }
@@ -62,5 +67,13 @@ public class ApiConfiguration {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public List<String> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<String> collaborators) {
+        this.collaborators = collaborators;
     }
 }

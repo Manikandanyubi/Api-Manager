@@ -20,18 +20,15 @@ public class ApiConfigurationController {
 
     @PostMapping("/create")
     public ResponseEntity<ApiConfiguration> createApi(@RequestBody ApiConfiguration api) {
-        // Delegate to service for creation
         return ResponseEntity.ok(apiConfigurationService.createApi(api));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiConfiguration> updateApi(@PathVariable Long id, @RequestBody ApiConfiguration api) {
         try {
-            // Delegate to service for update
             ApiConfiguration updatedApi = apiConfigurationService.updateApi(id, api);
             return ResponseEntity.ok(updatedApi);
         } catch (RuntimeException e) {
-            // Handle the case where the API with the given ID is not found
             return ResponseEntity.notFound().build();
         }
     }
@@ -59,5 +56,45 @@ public class ApiConfigurationController {
     public ResponseEntity<List<ApiConfiguration>> searchApisByName(@RequestParam String name) {
         // Delegate to service for searching APIs by name
         return ResponseEntity.ok(apiConfigurationService.searchApisByName(name));
+    }
+
+    @PostMapping("/{id}/add-collaborator")
+    public ResponseEntity<ApiConfiguration> addCollaborator(@PathVariable Long id, @RequestParam String email) {
+        try {
+            ApiConfiguration updatedApi = apiConfigurationService.addCollaborator(id, email);
+            return ResponseEntity.ok(updatedApi);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/update-collaborator")
+    public ResponseEntity<ApiConfiguration> updateCollaborator(@PathVariable Long id, @RequestParam String oldEmail, @RequestParam String newEmail) {
+        try {
+            ApiConfiguration updatedApi = apiConfigurationService.updateCollaborator(id, oldEmail, newEmail);
+            return ResponseEntity.ok(updatedApi);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/collaborators")
+    public ResponseEntity<List<String>> getCollaborators(@PathVariable Long id) {
+        try {
+            List<String> collaborators = apiConfigurationService.getCollaborators(id);
+            return ResponseEntity.ok(collaborators);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}/delete-collaborator")
+    public ResponseEntity<ApiConfiguration> deleteCollaborator(@PathVariable Long id, @RequestParam String email) {
+        try {
+            ApiConfiguration updatedApi = apiConfigurationService.deleteCollaborator(id, email);
+            return ResponseEntity.ok(updatedApi);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

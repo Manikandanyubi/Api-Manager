@@ -16,7 +16,7 @@ public class ApiConfigurationService {
         this.repository = repository;
     }
 
-     public ApiConfiguration createApi(ApiConfiguration api) {
+    public ApiConfiguration createApi(ApiConfiguration api) {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         api.setUserEmail(userEmail);
         return repository.save(api);
@@ -67,5 +67,52 @@ public class ApiConfigurationService {
 
     public List<ApiConfiguration> searchApisByName(String name) {
         return repository.findByNameContaining(name);
+    }
+
+    public ApiConfiguration addCollaborator(Long id, String email) {
+        return repository.findById(id)
+                .map(existingApi -> {
+                    List<String> collaborators = existingApi.getCollaborators();
+                    if (!collaborators.contains(email)) {
+                        collaborators.add(email);
+                    }
+                    return repository.save(existingApi);
+                })
+                .orElseThrow(() -> new RuntimeException("API not found with ID: " + id));
+    }
+
+    public ApiConfiguration updateCollaborator(Long id, String oldEmail, String newEmail) {
+        return repository.findById(id)
+                .map(existingApi -> {
+                    List<String> collaborators = existingApi.getCollaborators();
+                    int index = collaborators.indexOf(oldEmail);
+                    if (index != -1) {
+                        collaborators.set(index, newEmail);
+                    } else {
+                        throw new RuntimeException("Collaborator not found with email: " + oldEmail);
+                    }
+                    return repository.save(existingApi);
+                })
+                .orElseThrow(() -> new RuntimeException("API not found with ID: " + id));
+    }
+
+    public List<String> getCollaborators(Long id) {
+        return repository.findById(id)
+                .map(ApiConfiguration::getCollaborators)
+                .orElseThrow(() -> new RuntimeException("API not found with ID: " + id));
+    }
+
+    public ApiConfiguration deleteCollaborator(Long id, String email) {
+        return repository.findById(id)
+                .map(existingApi -> {
+                    List<String> collaborators = existingApi.getCollaborators();
+                    if (collaborators.contains(email)) {
+                        collaborators.remove(email);
+                    } else {
+                        throw new RuntimeException("Collaborator not found with email: " + email);
+                    }
+                    return repository.save(existingApi);
+                })
+                .orElseThrow(() -> new RuntimeException("API not found with ID: " + id));
     }
 }
