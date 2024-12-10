@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.print.DocFlavor.STRING;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/admin")
@@ -58,20 +60,21 @@ public class ApiConfigurationController {
         return ResponseEntity.ok(apiConfigurationService.searchApisByName(name));
     }
 
-    @PostMapping("/{id}/add-collaborator")
-    public ResponseEntity<ApiConfiguration> addCollaborator(@PathVariable Long id, @RequestParam String email) {
+    @PostMapping("/{id}/add-collaborators")
+    public ResponseEntity<ApiConfiguration> addCollaborators(@PathVariable Long id, @RequestBody List<String> emails) {
         try {
-            ApiConfiguration updatedApi = apiConfigurationService.addCollaborator(id, email);
+            ApiConfiguration updatedApi = apiConfigurationService.addCollaborators(id, emails);
             return ResponseEntity.ok(updatedApi);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PutMapping("/{id}/update-collaborator")
-    public ResponseEntity<ApiConfiguration> updateCollaborator(@PathVariable Long id, @RequestParam String oldEmail, @RequestParam String newEmail) {
+    @PutMapping("/{id}/update-collaborators")
+    public ResponseEntity<ApiConfiguration> updateCollaborators(@PathVariable Long id,
+            @RequestBody List<String> newEmails) {
         try {
-            ApiConfiguration updatedApi = apiConfigurationService.updateCollaborator(id, oldEmail, newEmail);
+            ApiConfiguration updatedApi = apiConfigurationService.updateCollaborators(id, newEmails);
             return ResponseEntity.ok(updatedApi);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -88,10 +91,11 @@ public class ApiConfigurationController {
         }
     }
 
-    @DeleteMapping("/{id}/delete-collaborator")
-    public ResponseEntity<ApiConfiguration> deleteCollaborator(@PathVariable Long id, @RequestParam String email) {
+    @DeleteMapping("/{id}/delete-collaborators")
+    public ResponseEntity<ApiConfiguration> deleteCollaborators(@PathVariable Long id,
+            @RequestBody List<String> emails) {
         try {
-            ApiConfiguration updatedApi = apiConfigurationService.deleteCollaborator(id, email);
+            ApiConfiguration updatedApi = apiConfigurationService.deleteCollaborators(id, emails);
             return ResponseEntity.ok(updatedApi);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
